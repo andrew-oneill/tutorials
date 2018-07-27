@@ -336,6 +336,8 @@ terraform destroy
 
 Type 'yes' at the prompt and terraform will bring down your server!
 
+*Note: On destroy you may receive an error caused by the outputs.tf variables. This can be ignored.*
+
 ## Next Steps
 
 This is only scratching the very surface of what terraform can do. Terraform can create entire VPC networks, it can change DNS settings in Route53, and it can also work with lots of other cloud providers such as Google Cloud Platform and Digital Ocean. Perhaps expand out from lightsail and move into EC2. It's a bit jump but it's great knowledge to have. Good luck!
