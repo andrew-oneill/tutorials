@@ -1,4 +1,4 @@
-# Terraform
+# Terraform Basic Tutorial
 
 [Terraform](https://www.terraform.io/) is piece of server provisioning software. It allows you to write and plan your server infrastructure in code, and then create/modify it in one or a few small operations; depending on how you wish to create your infrastructure.
 
@@ -38,17 +38,11 @@ Default region name [None]: us-east-1
 Default output format [None]: json
 ```
 
-Download the tutorial repo:
-
-```bash
-git clone git@bitbucket.org:bensimonbyrne/terraform.git
-```
-
 ## Tutorial
 
 Create a directory in your preferred location on your machine to write the terraform files and open that directory in your code editor of choice.
 
-### Writing a Terraform Module
+### Terraform Modules
 
 Modules are self contained terraform configurations that can be re-used. For instance you could create a terraform module that creates a server, or another module that creates a database.
 
@@ -64,7 +58,7 @@ This is all we will use for this tutorial. If you wish to read more about terraf
 
 **Create all three of these files in your code directory and leave them blank.**
 
-#### 1. Variables
+### 1. Variables
 
 We're going add variables to this file as we go. These variables can be overidden by the user, but we'll set some sensible defaults so that we don't have to enter every variable every time.
 
@@ -80,7 +74,7 @@ variable "region" {
 }
 ```
 
-#### 2. Providers
+### 2. Providers
 
 The first thing we need to do is specify a provider. A provider is responsible for understanding interacting with APIs of various cloud providers and controlling your local machine. We need to use the following provider for this tutorial:
 
@@ -99,7 +93,7 @@ provider "null" {}
 
 You'll notice that we're using the two variables we added to variables.tf. This is how you use variables in terraform: you place them inside a string using `${}` and then calling them via `var.<variable>`.
 
-#### 3. Terraform State
+### 3. Terraform State
 
 Terraform is able to make iterative changes to your infrastructure. For instance if you want to change the name of a server, it can do this without having to destroy the existing server or create a new one. For this to be possble, terraform stores a **state file** that keeps track of the resources it has created.
 
@@ -107,9 +101,9 @@ When you want to update your infrastructure, terraform compares its' state file 
 
 This state file can be stored locally or remotely. Generally storing the state in an S3 bucket is a good solution so that everyone on the team has access to the same terraform state. However for this tutorial we are simply going to store the state locally in your tutorial directory, called **terraform.tfstate**. This is the default place terraform stores its' state, so we don't need to configure anything for this.
 
-#### 4. Server
+### 4. Server
 
-##### Instance Specification
+#### Instance Specification
 
 We're almost ready to create our first server. Before we do, let's create a few more variables to use when making our server.
 
@@ -164,7 +158,7 @@ output "server_ip" {
 
 As you can see, we are grabbing the `public_ip_address` output value of the `aws_lightsail_instance` resource and outputting it from our module. Because our module is the root module, the outputs will appear in our terminal after applying our terraform plan.
 
-##### Instance Creation
+#### Instance Creation
 
 Now that we've written the basic code we need to create a bare bones server, we can try it out! First we're going to do a test run using `terraform plan`.
 
@@ -190,9 +184,9 @@ terraform apply
 
 If you now visit the [Amazon Lightsail Web Console](https://lightsail.aws.amazon.com/ls/webapp/home/instances) you should be able to see your instance.
 
-#### 5. Provisioning
+### 5. Provisioning
 
-##### Connection
+#### Connection
 
 Now that we have the server created, we need to provision it, copy an application and start said application. To do this, we're going to use terraform [provisioners](https://www.terraform.io/docs/provisioners/index.html). These can be inserted into particular resources and used to perform additional procedures on those resources after they've been created. We're going to create a provider that copies our application to the server, and then another provider that starts the application.
 
@@ -227,7 +221,7 @@ resource "aws_lightsail_instance" "app" {
 }
 ```
 
-##### Creating App
+#### Creating App
 
 We're going to write a basic hello world nodejs application. Simply create a file called hello.js and put the following in it:
 
@@ -243,7 +237,7 @@ console.log('Server running at http://localhost:8080/');
 
 This application starts a basic http server and when visiting it, displays 'Hello World' to the user.
 
-##### Copying App
+#### Copying App
 
 Next we're going to copy the application onto the newly created server. To do so, add the a [file](https://www.terraform.io/docs/provisioners/file.html) provisioner within the `aws_lightsail_instance` resource block at the bottom:
 
@@ -259,7 +253,7 @@ resource "aws_lightsail_instance" "app" {
 }
 ```
 
-##### Provisioning the Server and Starting the App
+#### Provisioning the Server and Starting the App
 
 The next step is to provision the server with the software we need and start the application. We'll use the [remote-exec](https://www.terraform.io/docs/provisioners/remote-exec.html) provisioner to execute a script on the server once its up and running. We'll use [heredoc](https://en.wikipedia.org/wiki/Here_document) syntax so that we can write the script inline. However you could also specify it in an external file using the [file function](https://www.terraform.io/docs/configuration/interpolation.html#file-path-).
 
@@ -297,7 +291,7 @@ resource "aws_lightsail_instance" "app" {
 }
 ```
 
-##### Opening Ports
+#### Opening Ports
 
 The last step we have to do is open the necessary ports to view the application. Because the app runs on port 8080, we'll need to open that port to view it in our browser.
 
@@ -328,7 +322,7 @@ This should be all we need to run the node app! Run `terraform apply` again to m
 
 Once complete visit the IP address that was output in your terminal in your browser on port 8080, and you should be able to see the site!
 
-#### 6. Server Takedown
+### 6. Server Takedown
 
 Once we're finished with our server we can bring it down. Running the following in your terminal we can destroy the server:
 
@@ -342,7 +336,7 @@ terraform destroy
 
 Type 'yes' at the prompt and terraform will bring down your server!
 
-### Next Steps
+## Next Steps
 
 This is only scratching the very surface of what terraform can do. Terraform can create entire VPC networks, it can change DNS settings in Route53, and it can also work with lots of other cloud providers such as Google Cloud Platform and Digital Ocean. Perhaps expand out from lightsail and move into EC2. It's a bit jump but it's great knowledge to have. Good luck!
 
