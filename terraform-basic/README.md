@@ -121,7 +121,7 @@ variable "aws_instance_image" {
 
 # Size of the server we want to make
 variable "aws_instance_model" {
-  default = "micro_1_0"
+  default = "nano_1_0"
 }
 ```
 
