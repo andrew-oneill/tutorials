@@ -28,10 +28,10 @@ Download the ssh key for the us-east-1 region from within lightsail and set the 
 
 ## Setup
 
-Configure your aws-cli:
+Configure your aws-cli, substituting your aws credentials in place of the angled brackets:
 
 ```
-$ aws configure
+$ aws configure --profile <your aws profile name>
 AWS Access Key ID [None]: <your access key>
 AWS Secret Access Key [None]: <your secret access key>
 Default region name [None]: us-east-1
@@ -66,7 +66,7 @@ Add the following to variables.tf:
 
 ```hcl
 variable "profile" {
-  default = "bbomn"
+  default = "<your aws profile name>"
 }
 
 variable "region" {
@@ -107,11 +107,11 @@ This state file can be stored locally or remotely. Generally storing the state i
 
 We're almost ready to create our first server. Before we do, let's create a few more variables to use when making our server.
 
-Add the following to variables.tf, changing `<yourfirstname>` for your first name:
+Add the following to variables.tf, changing `<your first name>` for your first name:
 
 ```hcl
 variable "name" {
-  default = "<yourfirstname>-terraform-tutorial"
+  default = "<your first name>-terraform-tutorial"
 }
 
 # Server operating system image
@@ -165,8 +165,8 @@ Now that we've written the basic code we need to create a bare bones server, we 
 Run following in your terminal:
 
 ```bash
-# Set the active aws profile so that the server is created in the BBOMN aws account
-export AWS_PROFILE=bbomn
+# Set the active aws profile so that the server is created in your aws account
+export AWS_PROFILE=<your aws profile name>
 export TF_VAR_profile=$AWS_PROFILE
 
 # First we need to initialize the providers we specified in step 1
@@ -327,8 +327,8 @@ Once complete visit the IP address that was output in your terminal in your brow
 Once we're finished with our server we can bring it down. Running the following in your terminal we can destroy the server:
 
 ```bash
-# Set the active aws profile so that the server is created in the BBOMN aws account
-export AWS_PROFILE=bbomn
+# Set the active aws profile so that the server is created in your aws account
+export AWS_PROFILE=<your aws profile name>
 export TF_VAR_profile=$AWS_PROFILE
 
 terraform destroy
