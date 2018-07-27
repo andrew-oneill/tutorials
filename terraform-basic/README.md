@@ -336,7 +336,7 @@ terraform destroy
 
 Type 'yes' at the prompt and terraform will bring down your server!
 
-*Note: On destroy you may receive an error caused by the outputs.tf variables. This can be ignored.*
+*Note: On destroy you may receive an error caused by the outputs.tf variables. This is cause by a terraform [issue](https://github.com/hashicorp/terraform/issues/522) but it does not affect the destruction process and can be ignored.*
 
 ## Next Steps
 
